@@ -1,15 +1,34 @@
 import { useState } from 'react'
 
+const Header = ({ heading }) => <h2>{heading}</h2>
+
 const Button = ({ handleClick, text }) => (<button onClick={handleClick}>
   {text}
   </button>
   )
 
+  const HighestAnecdoteVote = ({ anecdotes, votes }) => {
+    const highestVotes = Math.max(...votes)
+    const highestVotesindex = votes.indexOf(highestVotes)
+
+    if (highestVotes === 0) {
+      return (
+        <>
+        <p>No vote yet</p>
+        </>
+      )
+    }
+
+    return (
+      <VoteCounts text={anecdotes[highestVotesindex]} votes={highestVotes} />
+    )
+  }
+
 const VoteCounts = ({ text, votes }) => {
   return (
     <>
       <p>{text}</p>
-      <p>has {votes}</p>
+      <p>has {votes} votes</p>
     </>
   )
 }
@@ -45,6 +64,8 @@ const App = () => {
       <VoteCounts text={anecdotes[selected]} votes={votes[selected]} />
       <Button handleClick={setToVotes} text='votes' />
       <Button handleClick={setToSelected} text='next anecdotes' />
+      <Header heading='Anecdote with most votes' />
+      <HighestAnecdoteVote anecdotes={anecdotes} votes={votes} />
     </div>
   )
 }
