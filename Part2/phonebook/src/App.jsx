@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import Phonebook from './Components/Phonebook'
-
+import Person from './Components/Person'
+import Filter from './Components/Filter'
+import PersonForm from './Components/PersonForm'
 
 const App = () => {
-  const [persons, setPerson] = useState([
-    { name: 'Arto Hellas' }
-  ])
+  const [persons, setPerson] = useState([])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [searchQuery, setSeachQuery] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
 
   const addName = (event) => {
@@ -18,40 +19,64 @@ const App = () => {
     } else {
     const personObject = {
       name: newName,
+      number: newNumber,
       id: persons.length + 1
     }
     setPerson(persons.concat(personObject))
     setNewName('')
+    setNewNumber('')
     setErrorMessage(null)
    }
   }
+
+  const filteredPersons = searchQuery === '' 
+    ? persons
+    : persons.filter(person => 
+    person.name.toLowerCase().includes(searchQuery.toLowerCase()))
+  
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
+  const handleSearchChange = (event) => {
+    setSeachQuery(event.target.value)
+  }
+
+  const Persons = ({persons}) => {
+    return (
+      <div>
+        {persons.map(person => (
+          <Person key={person.name} person={person} />
+        ))}
+         <p>{errorMessage}</p> 
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input 
-          value={newName}
-          onChange={handleNameChange} 
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+    
+      <Filter searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
+  
+      <h3>add a new</h3>
+
+      <PersonForm
+        addName={addName} 
+        newName={newName} 
+        handleNameChange={handleNameChange} 
+        newNumber={newNumber} 
+        handleNumberChange={handleNumberChange}
+      />
       
-      <h2>Numbers</h2>
-      <div>
-        {persons.map(person => 
-          <Phonebook key={person.name} person={person} />
-        )}
-      </div>
-      <p>{errorMessage}</p> 
+      <h3>Numbers</h3>
+      
+      <Persons persons={filteredPersons} />
     </div>
   )
 }
