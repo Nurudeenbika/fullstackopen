@@ -1,14 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Person from './Components/Person'
 import Filter from './Components/Filter'
 import PersonForm from './Components/PersonForm'
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPerson] = useState([])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchQuery, setSeachQuery] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+
+  useEffect(() => {
+    axios
+    .get('http://localhost:3001/persons')
+    .then(response => {
+      console.log('promised fulfilled')
+      setPersons(response.data)
+    })
+  }, [])
 
   const addName = (event) => {
     event.preventDefault()
@@ -22,7 +32,7 @@ const App = () => {
       number: newNumber,
       id: persons.length + 1
     }
-    setPerson(persons.concat(personObject))
+    setPersons(persons.concat(personObject))
     setNewName('')
     setNewNumber('')
     setErrorMessage(null)
