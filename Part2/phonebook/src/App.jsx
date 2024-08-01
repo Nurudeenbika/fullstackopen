@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import Person from './Components/Person'
 import Filter from './Components/Filter'
 import PersonForm from './Components/PersonForm'
-import axios from 'axios'
+//import axios from 'axios'
+import contactService from './services/contacts'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,12 +13,12 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('promised fulfilled')
-      setPersons(response.data)
-    })
+    contactService
+      .getAll()
+      .then(response => {
+        console.log('promised fulfilled')
+        setPersons(response.data)
+      })
   }, [])
 
   const addName = (event) => {
@@ -29,17 +30,19 @@ const App = () => {
     } else {
     const personObject = {
       name: newName,
-      number: newNumber
-      //id: persons.length + 1
+      number: newNumber,
+      // id: persons.length + 1
     }
 
-    axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(response => response.data)
-    setPersons(persons.concat(personObject))
+    contactService
+      .create(personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data))
     setNewName('')
     setNewNumber('')
     setErrorMessage(null)
+      })
+    
    }
   }
 
@@ -64,9 +67,9 @@ const App = () => {
   const Persons = ({persons}) => {
     return (
       <div>
-        {persons.map(person => (
+        {persons.map(person => 
           <Person key={person.name} person={person} />
-        ))}
+        )}
          <p>{errorMessage}</p> 
       </div>
     )
