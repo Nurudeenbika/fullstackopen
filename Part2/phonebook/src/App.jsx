@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
-import Person from './Components/Person'
 import Filter from './Components/Filter'
 import PersonForm from './Components/PersonForm'
-//import axios from 'axios'
+import Persons from './Components/Persons'
 import contactService from './services/contacts'
 
 const App = () => {
@@ -16,7 +15,6 @@ const App = () => {
     contactService
       .getAll()
       .then(response => {
-        console.log('promised fulfilled')
         setPersons(response.data)
       })
   }, [])
@@ -30,8 +28,7 @@ const App = () => {
     } else {
     const personObject = {
       name: newName,
-      number: newNumber,
-      // id: persons.length + 1
+      number: newNumber
     }
 
     contactService
@@ -64,15 +61,26 @@ const App = () => {
     setSeachQuery(event.target.value)
   }
 
-  const Persons = ({persons}) => {
-    return (
-      <div>
-        {persons.map(person => 
-          <Person key={person.name} person={person} />
-        )}
-         <p>{errorMessage}</p> 
-      </div>
-    )
+  
+  const deletePerson = id => {
+    const person = persons.find(p => p.id === id)
+    const confirmDelete = window.confirm(`Delete ${person.name} ?`)
+
+    if (confirmDelete) {
+      contactService
+        .remove(id)
+        .then(returnedPerson => {
+          persons.map(person => person.id !== id ? person : returnedPerson)
+        })
+        setPersons(persons.filter(person => person.id !== id))
+        setErrorMessage({
+          text: `${person.name} was deleted from the phonebook`,
+          type: 'notification'
+        })
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+    }
   }
 
   return (
@@ -93,7 +101,10 @@ const App = () => {
       
       <h3>Numbers</h3>
       
-      <Persons persons={filteredPersons} />
+      <Persons 
+        persons={filteredPersons}
+        deletePerson={deletePerson}
+      />
     </div>
   )
 }
