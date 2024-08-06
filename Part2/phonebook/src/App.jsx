@@ -3,13 +3,13 @@ import Filter from './Components/Filter'
 import PersonForm from './Components/PersonForm'
 import Persons from './Components/Persons'
 import contactService from './services/contacts'
-
+import Notification from './Components/Notification'
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchQuery, setSeachQuery] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     contactService
@@ -21,10 +21,28 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const existingName = persons.find(person => person.name === newName)
+    const existingPerson = persons.find(person => person.name === newName)
 
-    if (existingName) {
-      setErrorMessage(window.alert(`${newName} is already added to phonebook`))
+    if (existingPerson) {
+
+      const confirmUpdate = window.confirm(`${newName} is already added to phonebook, replace the phone number with a new one?`)
+      if (confirmUpdate) {
+        const updatePerson = { ...existingPerson, number: newNumber}
+        contactService
+          .update(existingPerson.id, updatePerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(p => (p.id === existingPerson.id ? returnedPerson : p)))
+            setNewName('')
+            setNewNumber('')
+            setNotification({
+              text: `${newName} 's phone number was updated.`,
+              type: 'notification'
+            })
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+          })
+      }
     } else {
     const personObject = {
       name: newName,
@@ -37,7 +55,10 @@ const App = () => {
         setPersons(persons.concat(response.data))
     setNewName('')
     setNewNumber('')
-    setErrorMessage(null)
+    setNotification({ text: `${newName} was added to the phonebook.`, type: 'notification'})
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
       })
     
    }
@@ -73,12 +94,12 @@ const App = () => {
           persons.map(person => person.id !== id ? person : returnedPerson)
         })
         setPersons(persons.filter(person => person.id !== id))
-        setErrorMessage({
+        setNotification({
           text: `${person.name} was deleted from the phonebook`,
           type: 'notification'
         })
         setTimeout(() => {
-          setErrorMessage(null)
+          setNotification(null)
         }, 5000)
     }
   }
@@ -86,7 +107,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-    
+      <Notification notification={notification} />
       <Filter searchQuery={searchQuery} handleSearchChange={handleSearchChange} />
   
       <h3>add a new</h3>
