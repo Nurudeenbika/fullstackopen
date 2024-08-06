@@ -3,9 +3,8 @@ const Notification = ({ notification }) => {
         return null
     }
 
-
     return (
-        <div className="{notification.type}">
+        <div className="notification" style={{ color: notification.error ? "red" : "green" }}>
             {notification.text}
         </div>
     )

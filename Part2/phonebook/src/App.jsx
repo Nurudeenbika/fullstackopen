@@ -34,10 +34,13 @@ const App = () => {
             setPersons(persons.map(p => (p.id === existingPerson.id ? returnedPerson : p)))
             setNewName('')
             setNewNumber('')
-            setNotification({
-              text: `${newName} 's phone number was updated.`,
-              type: 'notification'
-            })
+            setNotification({error: false, text: `${newName} 's phone number was updated.`})
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+          })
+          .catch((error) => {
+            setNotification({ error: true, text: `text: ${newName} 's phone number has already been deleted from server.`})
             setTimeout(() => {
               setNotification(null)
             }, 5000)
@@ -53,14 +56,14 @@ const App = () => {
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data))
-    setNewName('')
-    setNewNumber('')
-    setNotification({ text: `${newName} was added to the phonebook.`, type: 'notification'})
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+        setNewName('')
+        setNewNumber('')
+        setNotification({error: false, text: `${newName} was added to the phonebook.`})
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
-    
+      
    }
   }
 
@@ -94,9 +97,8 @@ const App = () => {
           persons.map(person => person.id !== id ? person : returnedPerson)
         })
         setPersons(persons.filter(person => person.id !== id))
-        setNotification({
-          text: `${person.name} was deleted from the phonebook`,
-          type: 'notification'
+        setNotification({ error: false, text: `${person.name} was deleted from the phonebook`,
+         
         })
         setTimeout(() => {
           setNotification(null)
