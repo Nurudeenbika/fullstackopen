@@ -1,4 +1,4 @@
-const Countries = ({ countries, handleCountrySelect }) => {
+const Countries = ({ countries, handleSelect }) => {
     if (countries.length > 10) {
         return (
             <div>
@@ -11,7 +11,7 @@ const Countries = ({ countries, handleCountrySelect }) => {
             <ul>
                 {countries.map((country) => (
                     <li key={country.id}>
-                        {country.name} <button onClick={() => handleCountrySelect(country.id)}>show</button>
+                        {country.name} <button onClick={() => handleSelect(country.id)}>show</button>
                     </li>
                 ))}
             </ul>

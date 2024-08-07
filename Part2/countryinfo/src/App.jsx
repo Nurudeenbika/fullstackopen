@@ -20,7 +20,7 @@ const App = () => {
             name: country.name.common,
             area: country.area,
             population: country.population,
-            flag: country.flag.png,
+            flag: country.flags.png,
             languages: country.languages instanceof Object ? Object.values(country.languages) : [],
             capital: country.capital instanceof Array ? country.capital : []
           };
@@ -31,11 +31,11 @@ const App = () => {
         console.log(`countryService.getAll failed: ${error.message}`)
       })
   }, []);
-  const handleCountryFilter = (event) => {
+  const handleFilter = (event) => {
     setSearchText(event.target.value)
     setSelectedId("");
   };
-  const handleCountrySelect = (id) => {
+  const handleSelect = (id) => {
     setSelectedId(id);
   };
   const filteredCountries = countries.filter((country) => country.name.toLowerCase().includes(searchText.toLowerCase()));
@@ -45,11 +45,11 @@ const App = () => {
     <div>
       <Filter
         searchText={searchText}
-        handleCountryFilter={handleCountryFilter}
+        handleFilter={handleFilter}
       />
       <Countries
         countries={filteredCountries}
-        handleCountrySelect={handleCountrySelect}
+        handleSelect={handleSelect}
       />
       <Country
         country={selectedCountry}
