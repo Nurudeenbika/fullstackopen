@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json())
 
 let persons = [
   { 
@@ -25,7 +26,33 @@ let persons = [
   }
 ]
 
+const generateId = () => {
+  const maxId = persons.length > 0
+    ? Math.random(...persons.map(p => Number(p.id)))
+    : 0
+  return String(maxId + 7)
+}
 
+app.post('/api/persons', (request, response) => {
+  body = request.body
+
+  if (!body.name && !body.number) {
+    return response.status(400).json({
+      error: 'name and number missing'
+    })
+  }
+
+  const person = {
+    id: generateId(),
+    name: body.name,
+    number: String(body.number) || ""
+   
+  }
+
+  persons = persons.concat(person)
+
+  response.json(person)
+})
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
@@ -53,7 +80,6 @@ app.get('/info', (request, response) => {
   const currentDate = new Date()
   response.send(`Phonebook has info for 2 people <p> ${currentDate}</p>`)
 })
-
 
 const PORT = 3001
 app.listen(PORT, () => {
