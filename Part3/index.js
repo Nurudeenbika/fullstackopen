@@ -28,6 +28,11 @@ let persons = [
   }
 ]
 
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
+
 const generateId = () => {
   const maxId = persons.length > 0
     ? Math.random(...persons.map(p => Number(p.id)))
