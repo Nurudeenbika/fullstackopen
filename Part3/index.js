@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
 var morgan = require('morgan')
+const cors = require('cors')
 
 app.use(express.json())
 morgan('tiny')
+app.use(cors())
+app.use(express.static('dist'))
 
 let persons = [
   { 
@@ -91,12 +94,16 @@ app.delete('/api/persons/:id', (request, response) => {
 
 })
 
+app.get('/', (request, response) => {
+  response.send('<h1>Hello world!</h1>')
+})
+
 app.get('/info', (request, response) => {
   const currentDate = new Date()
   response.send(`Phonebook has info for 2 people <p> ${currentDate}</p>`)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
