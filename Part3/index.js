@@ -32,18 +32,12 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 app.post('/api/persons', (request, response, next) => {
   body = request.body;
 
-  if (body.name || body.number === undefined) {
+  if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'name or number missing'
     })
   } 
 
-  const nameExists = persons.find(person => person.name === body.name )
-  if (nameExists) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  } 
   const person = new Person({
     name: body.name,
     number: body.number
