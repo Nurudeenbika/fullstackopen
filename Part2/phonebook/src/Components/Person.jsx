@@ -8,4 +8,4 @@ const Person = ({ person, deletePerson }) => {
     )
 }
 
-export default Person;
+export default Person 
