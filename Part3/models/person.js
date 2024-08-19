@@ -10,7 +10,7 @@ console.log('connecting to', url)
 
 mongoose.connect(url)
 
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
@@ -29,8 +29,8 @@ const personSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function(value) {
-        const phoneRegex = /^\d{2,3}-\d{7,}$/;
-        return phoneRegex.test(value);
+        const phoneRegex = /^\d{2,3}-\d{7,}$/
+        return phoneRegex.test(value)
       },
       message: props => `${props.value} is not a valid phone number.`
     }
