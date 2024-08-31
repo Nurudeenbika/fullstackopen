@@ -228,6 +228,28 @@ describe('when there is initially one user in db', () => {
 
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
+
+  test('should return 400 for invalid username and password', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'b',
+      name: 'Hassan Bashiru',
+      password: 't'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+
+    const usernames = usersAtEnd.map(u => u.username)
+    assert(!usernames.includes(newUser.username))
+  })
 })
 
 after(async () => {
