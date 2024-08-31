@@ -1,10 +1,9 @@
-POST   http://localhost:3003/api/blogs
+POST   http://localhost:3003/api/users
 Content-Type: application/json
 
 
 {
-    "title": "Intr",
-    "author": "Hassan Nurudeen",
-    "url": "nurubika.com/intro-to-react",
-    "likes": 6200
+  "username": "root",
+  "name": "Superuser",
+  "password": "osikpemhi"
 }
