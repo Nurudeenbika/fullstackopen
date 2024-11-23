@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 const calculateBmi = (heightCm: number, weightKg: number) => {
   if (!heightCm || !weightKg || heightCm <= 0 || weightKg <= 0) {
     return "Please provide valid height and weight.";
@@ -7,15 +9,23 @@ const calculateBmi = (heightCm: number, weightKg: number) => {
   const bmi = weightKg / (heightM * heightM);
 
   if (bmi < 18.5) {
-    return `Your BMI is ${bmi.toFixed(1)}. You are underweight.`;
+    return `Underweight.`;
   } else if (bmi < 24.9) {
-    return `Your BMI is ${bmi.toFixed(1)}. Normal range.`;
+    return `Normal weight.`;
   } else if (bmi < 29.9) {
-    return `Your BMI is ${bmi.toFixed(1)}. You are overweight.`;
+    return `Overweight.`;
   } else {
-    return `Your BMI is ${bmi.toFixed(1)}. You are obese`
+    return `Obese`
   }
-}
 
-console.log(calculateBmi(180, 74))
+}
+  const args = process.argv.slice(2);
+
+  if (args.length !== 2 || args.some(isNotNumber)) {
+    console.error("Usage: npm calculateBmi <heightCm> <weightKg>")
+    process.exit(1)
+  }
+
+  const [height, weight] = args.map(Number);
+  console.log(calculateBmi(height, weight))
 
