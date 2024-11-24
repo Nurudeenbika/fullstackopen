@@ -1,5 +1,3 @@
-import { isNotNumber } from "./utils";
-
 interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
@@ -10,7 +8,7 @@ interface ExerciseResult {
   average: number;
 }
 
-const calculatExercises = (dailyHours: number[], target: number): ExerciseResult => {
+export const calculatExercises = (dailyHours: number[], target: number): ExerciseResult => {
   const periodLength = dailyHours.length;
   const trainingDays = dailyHours.filter(day => day > 0).length;
   const average = dailyHours.reduce((sum, hours) => sum + hours, 0) / periodLength;
@@ -41,16 +39,3 @@ const calculatExercises = (dailyHours: number[], target: number): ExerciseResult
     average
   };
 };
-
-    const args = process.argv.slice(2);
-
-  if (args.length < 2 || args.some(isNotNumber)) {
-    console.error("Usage: npm run calculateExercises <target> <dailyHours...>");
-    process.exit(1);
-  }
-
-  const target = Number(args[0]);
-  const dailyHours = args.slice(1).map(Number);
-
-
-console.log(calculatExercises(dailyHours, target))
