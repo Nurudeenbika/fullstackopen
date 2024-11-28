@@ -1,4 +1,4 @@
-interface ExerciseResult {
+export interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -25,7 +25,7 @@ export const calculatExercises = (dailyHours: number[], target: number): Exercis
     ratingDescription = "not too bad but could be better";
   } else {
     rating = 1;
-    ratingDescription = "you need to put in more effort";
+    ratingDescription = "bad";
   }
 
   return {

@@ -15,7 +15,7 @@ export const calculateBmi = (heightCm: number, weightKg: number) => {
   } else if (bmi < 29.9) {
     return `Overweight.`;
   } else {
-    return `Obese`
+    return `Obese`;
   }
 
 };
@@ -26,11 +26,11 @@ if (isMain) {
 
   if (args.length !== 2 || args.some(isNotNumber)) {
     console.error("Usage: npm run calculateBmi <heightCm> <weightKg>");
-    process.exit(1)
+    process.exit(1);
   }
 
   const [height, weight] = args.map(Number);
-  console.log(calculateBmi(height, weight))
+  console.log(calculateBmi(height, weight));
 }
 
 
