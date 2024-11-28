@@ -17,7 +17,6 @@ export const calculatExercises = (dailyHours: number[], target: number): Exercis
   let rating: number;
   let ratingDescription: string;
 
-
   if (average >= target) {
     rating = 3;
     ratingDescription = "great job, you met your target!";
