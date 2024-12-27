@@ -13,13 +13,18 @@ export type NonSensitiveDiagnosesEntry = Omit<DiagnosesEntry, 'latin'>;
 
 
 
+export enum Gender {
+  Male = 'male',
+  Female = 'female',
+  Other = 'other',
+};
 
 export interface PatientsEntry {
     id: string;
     name: string;
     dateOfBirth: string;
     ssn?: string;
-    gender: string;
+    gender: Gender;
     occupation: string;
 };
 
