@@ -13,6 +13,7 @@ const App = () => {
   const [newBlogUrl, setNewBlogUrl] = useState("");
   const [newBlogLikes, setNewBlogLikes] = useState(0);
   const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState("null");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -40,9 +41,16 @@ const App = () => {
       setMessage('Logged in successfully')
       setTimeout(() => {
         setMessage(null);
+        setMessageType("null");
       }, 5000);
     } catch (exception) {
       console.error("Login failed:", exception);
+      setMessage("Wrong username or password");
+      setMessageType("error");
+      setTimeout(() => {
+        setMessage(null);
+        setMessageType("null");
+      }, 5000);
     }
   };
   const handleLogout = () => {
@@ -50,8 +58,10 @@ const App = () => {
     setUsername("");
     setPassword("");
     setMessage('Logged out successfully')
+    setMessageType("success");
     setTimeout(() => {
       setMessage(null);
+      setMessageType("null");
     }, 5000);
   };
 
@@ -72,14 +82,18 @@ const App = () => {
       setNewBlogUrl("");
       setNewBlogLikes(0);
       setMessage(`A new blog "${createdBlog.title}" by ${createdBlog.author} added`);
+      setMessageType("success");
       setTimeout(() => {
         setMessage(null);
+        setMessageType("null");
       }, 5000);
     } catch (exception) {
       console.error("Error creating blog:", exception);
       setMessage("Error creating blog");
+      setMessageType("error");
       setTimeout(() => {
         setMessage(null);
+        setMessageType("null");
       }, 5000);
     }
   }
@@ -88,7 +102,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        {message && <div>{message}</div>}
+        {message && <div className={`message ${messageType}`}>{message}</div>}
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -117,7 +131,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {message && <div>{message}</div>}
+      {message && <div className={`message ${messageType}`}>{message}</div>}
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
       <form onSubmit={handleCreateBlog}>
